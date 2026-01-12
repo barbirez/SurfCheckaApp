@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, typography } from '../../theme';
 import { Button, Surfboard } from '../../components';
 import { OnboardingStackParamList } from '../../types';
+import { t } from '../../i18n';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<OnboardingStackParamList, 'Welcome'>;
@@ -24,10 +25,8 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
       <View style={styles.content}>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Tell us a little bit about yourself</Text>
-          <Text style={styles.subtitle}>
-            This way we can understand the best conditions for you to go surfing
-          </Text>
+          <Text style={styles.title}>{t.onboarding.welcome.title}</Text>
+          <Text style={styles.subtitle}>{t.onboarding.welcome.subtitle}</Text>
         </View>
 
         <View style={styles.surfboardContainer}>
@@ -37,7 +36,7 @@ export function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 
       <View style={styles.footer}>
         <Button
-          title="Start"
+          title={t.onboarding.welcome.start}
           onPress={() => navigation.navigate('Experience')}
           variant="primary"
           size="large"

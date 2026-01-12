@@ -6,15 +6,16 @@ import { colors, spacing, typography } from '../../theme';
 import { Button, SelectOption } from '../../components';
 import { OnboardingStackParamList, SurfLevel } from '../../types';
 import { useUser } from '../../context/UserContext';
+import { t } from '../../i18n';
 
 type LevelScreenProps = {
   navigation: NativeStackNavigationProp<OnboardingStackParamList, 'Level'>;
 };
 
 const levelOptions: { value: SurfLevel; label: string }[] = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
+  { value: 'beginner', label: t.onboarding.level.options.beginner },
+  { value: 'intermediate', label: t.onboarding.level.options.intermediate },
+  { value: 'advanced', label: t.onboarding.level.options.advanced },
 ];
 
 export function LevelScreen({ navigation }: LevelScreenProps) {
@@ -26,12 +27,10 @@ export function LevelScreen({ navigation }: LevelScreenProps) {
       setLevel(selected);
     }
     completeOnboarding();
-    // Navigation handled by RootNavigator conditional rendering
   };
 
   const handleSkip = () => {
     completeOnboarding();
-    // Navigation handled by RootNavigator conditional rendering
   };
 
   return (
@@ -49,11 +48,11 @@ export function LevelScreen({ navigation }: LevelScreenProps) {
       </View>
 
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>LEARNING ABOUT YOUR SURFING</Text>
+        <Text style={styles.label}>{t.onboarding.level.header}</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.question}>What's your surf level?</Text>
+        <Text style={styles.question}>{t.onboarding.level.question}</Text>
 
         <View style={styles.optionsContainer}>
           {levelOptions.map((option) => (
@@ -69,10 +68,10 @@ export function LevelScreen({ navigation }: LevelScreenProps) {
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleSkip}>
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText}>{t.skip}</Text>
         </TouchableOpacity>
         <Button
-          title="Next"
+          title={t.next}
           onPress={handleNext}
           variant="outline"
           size="medium"

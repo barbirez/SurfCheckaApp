@@ -1,26 +1,20 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import { HomeScreen, SurfcheckScreen } from '../screens/main';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { HomeScreen, SurfcheckScreen, TrackerScreen, ProfileScreen } from '../screens/main';
 import { colors } from '../theme';
 import { MainTabParamList } from '../types';
 import { View, Text, StyleSheet } from 'react-native';
+import { t } from '../i18n';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-// Placeholder screens for tabs
+// Placeholder for Favorites
 function FavoritesScreen() {
   return (
     <View style={styles.placeholder}>
-      <Text style={styles.placeholderText}>Favorites</Text>
-    </View>
-  );
-}
-
-function ProfileScreen() {
-  return (
-    <View style={styles.placeholder}>
-      <Text style={styles.placeholderText}>Profile</Text>
+      <Ionicons name="heart-outline" size={48} color={colors.textMuted} />
+      <Text style={styles.placeholderText}>{t.favorites.emptyState}</Text>
     </View>
   );
 }
@@ -36,12 +30,12 @@ export function MainNavigator() {
           borderTopWidth: 1,
           paddingBottom: 8,
           paddingTop: 8,
-          height: 60,
+          height: 65,
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '500',
         },
       }}
@@ -50,6 +44,7 @@ export function MainNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
+          tabBarLabel: t.nav.home,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
@@ -59,8 +54,19 @@ export function MainNavigator() {
         name="Surfcheck"
         component={SurfcheckScreen}
         options={{
+          tabBarLabel: t.nav.surfcheck,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search-outline" size={size} color={color} />
+            <Ionicons name="flash-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Tracker"
+        component={TrackerScreen}
+        options={{
+          tabBarLabel: t.nav.tracker,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="surfing" size={size} color={color} />
           ),
         }}
       />
@@ -68,6 +74,7 @@ export function MainNavigator() {
         name="Favorites"
         component={FavoritesScreen}
         options={{
+          tabBarLabel: t.nav.favorites,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="heart-outline" size={size} color={color} />
           ),
@@ -77,6 +84,7 @@ export function MainNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
+          tabBarLabel: t.nav.profile,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
@@ -92,9 +100,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundDark,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 16,
   },
   placeholderText: {
-    color: colors.textSecondary,
-    fontSize: 18,
+    color: colors.textMuted,
+    fontSize: 16,
+    textAlign: 'center',
+    paddingHorizontal: 32,
   },
 });

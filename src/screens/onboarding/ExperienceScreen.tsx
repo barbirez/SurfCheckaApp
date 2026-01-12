@@ -6,16 +6,17 @@ import { colors, spacing, typography } from '../../theme';
 import { Button, SelectOption } from '../../components';
 import { OnboardingStackParamList, SurfExperience } from '../../types';
 import { useUser } from '../../context/UserContext';
+import { t } from '../../i18n';
 
 type ExperienceScreenProps = {
   navigation: NativeStackNavigationProp<OnboardingStackParamList, 'Experience'>;
 };
 
 const experienceOptions: { value: SurfExperience; label: string }[] = [
-  { value: 'less_than_year', label: 'Less than a year' },
-  { value: '1_2_years', label: '1-2 years' },
-  { value: '3_5_years', label: '3-5 years' },
-  { value: '5_plus_years', label: '5+ years' },
+  { value: 'less_than_year', label: t.onboarding.experience.options.lessThanYear },
+  { value: '1_2_years', label: t.onboarding.experience.options.oneToTwo },
+  { value: '3_5_years', label: t.onboarding.experience.options.threeToFive },
+  { value: '5_plus_years', label: t.onboarding.experience.options.fivePlus },
 ];
 
 export function ExperienceScreen({ navigation }: ExperienceScreenProps) {
@@ -48,11 +49,11 @@ export function ExperienceScreen({ navigation }: ExperienceScreenProps) {
       </View>
 
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>LEARNING ABOUT YOUR SURFING</Text>
+        <Text style={styles.label}>{t.onboarding.experience.header}</Text>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.question}>How long have you been surfing?</Text>
+        <Text style={styles.question}>{t.onboarding.experience.question}</Text>
 
         <View style={styles.optionsContainer}>
           {experienceOptions.map((option) => (
@@ -68,10 +69,10 @@ export function ExperienceScreen({ navigation }: ExperienceScreenProps) {
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={handleSkip}>
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText}>{t.skip}</Text>
         </TouchableOpacity>
         <Button
-          title="Next"
+          title={t.next}
           onPress={handleNext}
           variant="outline"
           size="medium"

@@ -4,3 +4,7 @@ export { Surfboard } from './Surfboard';
 export { ConditionsCard } from './ConditionsCard';
 export { SurfSpotCard, SearchCard } from './SurfSpotCard';
 export { FeatureCard } from './FeatureCard';
+export { ImagePlaceholder } from './ImagePlaceholder';
+export { VisualConditions } from './VisualConditions';
+export { ArticleCard } from './ArticleCard';
+export { YouTubeCard } from './YouTubeCard';

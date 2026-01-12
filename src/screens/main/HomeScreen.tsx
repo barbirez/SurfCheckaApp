@@ -11,92 +11,106 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, typography } from '../../theme';
 import {
   FeatureCard,
-  ConditionsCard,
   SurfSpotCard,
   SearchCard,
+  VisualConditions,
+  ArticleCard,
+  YouTubeCard,
 } from '../../components';
 import { useUser } from '../../context/UserContext';
-import { RootStackParamList, TimeSlot, SurfSpot } from '../../types';
+import { RootStackParamList, SurfSpot, Article, YouTubeVideo, SurfConditions } from '../../types';
+import { t } from '../../i18n';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-// Mock data for conditions
-const mockTimeSlots: TimeSlot[] = [
-  {
-    time: '14:00',
-    label: 'NOW 2PM',
-    conditions: {
-      size: '0.9m',
-      sizeValue: 0.9,
-      period: '7s',
-      periodValue: 7,
-      wind: 'ESE',
-      windSpeed: 4,
-      windDirection: 'ESE',
-      swell: '0.5m',
-      swellHeight: 1.1,
-      weather: 'Sunny',
-      temperature: 24,
-    },
-  },
-  {
-    time: '17:00',
-    label: '5PM',
-    conditions: {
-      size: '1.0m',
-      sizeValue: 1.0,
-      period: '8s',
-      periodValue: 8,
-      wind: 'E',
-      windSpeed: 6,
-      windDirection: 'E',
-      swell: '0.6m',
-      swellHeight: 1.2,
-      weather: 'Partly Cloudy',
-      temperature: 22,
-    },
-  },
-];
+// Mock current conditions
+const mockConditions: SurfConditions = {
+  size: '0.9m',
+  sizeValue: 0.9,
+  period: '7s',
+  periodValue: 7,
+  wind: 'ESE',
+  windSpeed: 4,
+  windDirection: 'ESE',
+  swell: '0.5m',
+  swellHeight: 1.1,
+  weather: 'Ensolarado',
+  temperature: 24,
+  tide: 'Média',
+  waterTemp: 22,
+};
 
 // Mock surf spots
 const mockSurfSpots: SurfSpot[] = [
   {
     id: '1',
     name: 'Campeche',
-    location: 'Florianópolis, Brazil',
-    conditions: mockTimeSlots[0].conditions,
+    location: 'Florianópolis, SC',
+    conditions: mockConditions,
     rating: 4.5,
   },
   {
     id: '2',
-    name: 'Campeche Sul',
-    location: 'Florianópolis, Brazil',
-    conditions: mockTimeSlots[0].conditions,
+    name: 'Joaquina',
+    location: 'Florianópolis, SC',
+    conditions: mockConditions,
     rating: 4.2,
   },
   {
     id: '3',
-    name: 'Mole',
-    location: 'Florianópolis, Brazil',
-    conditions: mockTimeSlots[0].conditions,
+    name: 'Praia Mole',
+    location: 'Florianópolis, SC',
+    conditions: mockConditions,
     rating: 4.0,
+  },
+  {
+    id: '4',
+    name: 'Barra da Lagoa',
+    location: 'Florianópolis, SC',
+    conditions: mockConditions,
+    rating: 3.8,
+  },
+];
+
+// Articles from translations
+const articles: Article[] = t.articles;
+
+// Mock YouTube videos
+const mockYouTubeVideos: YouTubeVideo[] = [
+  {
+    id: '1',
+    title: 'Como melhorar sua remada no surf',
+    thumbnailUrl: '',
+    videoUrl: 'https://youtube.com/@finfunsurf',
+    duration: '8:24',
+  },
+  {
+    id: '2',
+    title: 'Técnicas de drop para iniciantes',
+    thumbnailUrl: '',
+    videoUrl: 'https://youtube.com/@finfunsurf',
+    duration: '12:15',
+  },
+  {
+    id: '3',
+    title: 'Leitura de ondas: guia completo',
+    thumbnailUrl: '',
+    videoUrl: 'https://youtube.com/@finfunsurf',
+    duration: '15:42',
   },
 ];
 
 export function HomeScreen({ navigation }: HomeScreenProps) {
   const { user } = useUser();
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
-  };
-
   const handleSurfcheck = () => {
     navigation.navigate('Surfcheck');
+  };
+
+  const handleBeachList = () => {
+    navigation.navigate('BeachList');
   };
 
   const handleSpotPress = (spotId: string) => {
@@ -113,31 +127,31 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
         {/* Greeting */}
         <View style={styles.header}>
           <Text style={styles.greeting}>
-            {getGreeting()}, {user.name}!
+            {t.greeting.hey}, {user.name}!
           </Text>
         </View>
 
         {/* Feature Card - Surfcheck Mate */}
         <FeatureCard
-          title="Surfcheck Mate"
-          description="Find the best beach break to go surfing. Anytime!"
-          buttonText="Try Now"
+          title={t.home.surfcheckMate.title}
+          description={t.home.surfcheckMate.description}
+          buttonText={t.home.surfcheckMate.button}
           onPress={handleSurfcheck}
         />
 
-        {/* Conditions Today */}
-        <ConditionsCard timeSlots={mockTimeSlots} activeSlot={0} />
+        {/* Visual Conditions */}
+        <VisualConditions conditions={mockConditions} />
 
         {/* Surf Spots */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>SURF SPOTS</Text>
+          <Text style={styles.sectionTitle}>{t.home.surfSpots}</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.spotsScrollView}
             contentContainerStyle={styles.spotsContent}
           >
-            <SearchCard onPress={handleSurfcheck} />
+            <SearchCard onPress={handleBeachList} />
             {mockSurfSpots.map((spot) => (
               <SurfSpotCard
                 key={spot.id}
@@ -151,11 +165,30 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
 
         {/* Learn & Follow */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>LEARN & FOLLOW</Text>
-          <View style={styles.learnCards}>
-            <View style={styles.learnCard} />
-            <View style={styles.learnCard} />
-          </View>
+          <Text style={styles.sectionTitle}>{t.home.learnFollow}</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.articlesContent}
+          >
+            {articles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* YouTube Videos */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t.home.watchYoutube}</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.youtubeContent}
+          >
+            {mockYouTubeVideos.map((video) => (
+              <YouTubeCard key={video.id} video={video} />
+            ))}
+          </ScrollView>
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -197,18 +230,15 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.lg,
     paddingRight: spacing.md,
   },
-  learnCards: {
-    flexDirection: 'row',
-    paddingHorizontal: spacing.lg,
-    gap: spacing.md,
+  articlesContent: {
+    paddingLeft: spacing.lg,
+    paddingRight: spacing.md,
   },
-  learnCard: {
-    flex: 1,
-    height: 100,
-    backgroundColor: colors.backgroundCard,
-    borderRadius: 12,
+  youtubeContent: {
+    paddingLeft: spacing.lg,
+    paddingRight: spacing.md,
   },
   bottomSpacer: {
-    height: spacing.xl,
+    height: spacing.xxl,
   },
 });

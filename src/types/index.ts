@@ -22,6 +22,8 @@ export interface SurfConditions {
   swellHeight: number;
   weather: string;
   temperature: number;
+  tide?: string;
+  waterTemp?: number;
 }
 
 export interface SurfSpot {
@@ -32,6 +34,11 @@ export interface SurfSpot {
   rating: number;
   isTopPick?: boolean;
   distance?: string;
+  imageUrl?: string;
+  latitude?: number;
+  longitude?: number;
+  liveCamUrl?: string;
+  description?: string;
 }
 
 export interface TimeSlot {
@@ -40,6 +47,45 @@ export interface TimeSlot {
   conditions: SurfConditions;
 }
 
+// Surf Tracker types
+export interface SurfSession {
+  id: string;
+  date: string;
+  duration: number; // in minutes
+  spotId: string;
+  spotName: string;
+  conditionRating: number; // 1-5 stars
+  surfRating: number; // 1-5 stars
+  notes?: string;
+}
+
+export interface SurfStreak {
+  currentStreak: number;
+  longestStreak: number;
+  totalSessions: number;
+  totalHours: number;
+  thisMonthSessions: number;
+}
+
+// Article type for Learn & Follow
+export interface Article {
+  id: string;
+  title: string;
+  category: string;
+  imageUrl?: string;
+  url?: string;
+}
+
+// YouTube video type
+export interface YouTubeVideo {
+  id: string;
+  title: string;
+  thumbnailUrl: string;
+  videoUrl: string;
+  duration?: string;
+}
+
+// Navigation types
 export type RootStackParamList = {
   Onboarding: undefined;
   OnboardingWelcome: undefined;
@@ -50,6 +96,9 @@ export type RootStackParamList = {
   Surfcheck: undefined;
   Recommendations: undefined;
   SpotDetails: { spotId: string };
+  BeachList: undefined;
+  CheckIn: { spotId?: string };
+  EditProfile: undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -61,6 +110,7 @@ export type OnboardingStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Surfcheck: undefined;
+  Tracker: undefined;
   Favorites: undefined;
   Profile: undefined;
 };

@@ -2,3 +2,8 @@ export { HomeScreen } from './HomeScreen';
 export { SurfcheckScreen } from './SurfcheckScreen';
 export { RecommendationsScreen } from './RecommendationsScreen';
 export { SpotDetailsScreen } from './SpotDetailsScreen';
+export { BeachListScreen } from './BeachListScreen';
+export { TrackerScreen } from './TrackerScreen';
+export { CheckInScreen } from './CheckInScreen';
+export { ProfileScreen } from './ProfileScreen';
+export { EditProfileScreen } from './EditProfileScreen';

@@ -6,45 +6,77 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { colors, spacing, borderRadius, typography } from '../../theme';
+import { ImagePlaceholder } from '../../components';
 import { RootStackParamList } from '../../types';
+import { t } from '../../i18n';
 
 type SpotDetailsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'SpotDetails'>;
   route: RouteProp<RootStackParamList, 'SpotDetails'>;
 };
 
+// Mock beach data
+const beachData: Record<string, any> = {
+  '1': {
+    name: 'Campeche',
+    location: 'Florianópolis, SC',
+    description: 'Uma das praias mais consistentes de Floripa, com ondas de qualidade o ano todo. Funciona bem com ondulação de sul e sudeste. Ideal para surfistas de todos os níveis.',
+    liveCamUrl: 'https://example.com/campeche-cam',
+  },
+  '2': {
+    name: 'Joaquina',
+    location: 'Florianópolis, SC',
+    description: 'Famosa por sediar campeonatos de surf, a Joaquina oferece ondas potentes e tubulares. Melhor com ondulação de leste e ventos de oeste.',
+    liveCamUrl: 'https://example.com/joaquina-cam',
+  },
+  '3': {
+    name: 'Praia Mole',
+    location: 'Florianópolis, SC',
+    description: 'Praia com boas ondas e ambiente jovem. Funciona bem com ondulação de sul e sudeste. Boa opção para intermediários.',
+    liveCamUrl: 'https://example.com/mole-cam',
+  },
+};
+
 export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps) {
   const { spotId } = route.params;
 
-  // Mock data - in real app, fetch based on spotId
+  const beachInfo = beachData[spotId] || beachData['1'];
+
   const spot = {
     id: spotId,
-    name: 'Kirra Beach',
-    location: 'Gold Coast, Australia',
-    description:
-      'World-class right-hand point break known for its long, hollow barrels. Best on south swells with light winds.',
+    name: beachInfo.name,
+    location: beachInfo.location,
+    description: beachInfo.description,
+    liveCamUrl: beachInfo.liveCamUrl,
     conditions: {
       size: '1.3m',
       period: '10s',
       wind: '12kph SSE',
       swell: '1.5m',
-      weather: 'Sunny',
+      weather: 'Ensolarado',
       temperature: 24,
-      tide: 'Mid',
+      tide: 'Média',
       waterTemp: 22,
     },
     forecast: [
-      { time: '6AM', rating: 4, size: '1.1m' },
-      { time: '9AM', rating: 5, size: '1.3m' },
-      { time: '12PM', rating: 4, size: '1.2m' },
-      { time: '3PM', rating: 3, size: '1.0m' },
-      { time: '6PM', rating: 3, size: '0.9m' },
+      { time: '6h', rating: 4, size: '1.1m' },
+      { time: '9h', rating: 5, size: '1.3m' },
+      { time: '12h', rating: 4, size: '1.2m' },
+      { time: '15h', rating: 3, size: '1.0m' },
+      { time: '18h', rating: 3, size: '0.9m' },
     ],
+  };
+
+  const handleLiveCamera = () => {
+    if (spot.liveCamUrl) {
+      Linking.openURL(spot.liveCamUrl);
+    }
   };
 
   return (
@@ -67,6 +99,21 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
+        {/* Beach Image */}
+        <View style={styles.imageContainer}>
+          <ImagePlaceholder
+            width="100%"
+            height={200}
+            variant="beach"
+            style={styles.beachImage}
+          />
+          {/* Live Camera Button */}
+          <TouchableOpacity style={styles.liveCamButton} onPress={handleLiveCamera}>
+            <Ionicons name="videocam" size={18} color={colors.textPrimary} />
+            <Text style={styles.liveCamText}>{t.beachDetails.liveCameras}</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Location */}
         <View style={styles.locationContainer}>
           <Ionicons name="location" size={16} color={colors.primary} />
@@ -75,12 +122,13 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
 
         {/* Description */}
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t.beachDetails.about}</Text>
           <Text style={styles.description}>{spot.description}</Text>
         </View>
 
         {/* Current Conditions */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>CURRENT CONDITIONS</Text>
+          <Text style={styles.sectionTitle}>{t.beachDetails.currentConditions}</Text>
           <View style={styles.conditionsCard}>
             <View style={styles.conditionRow}>
               <View style={styles.conditionItem}>
@@ -89,7 +137,7 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
                   size={20}
                   color={colors.primary}
                 />
-                <Text style={styles.conditionLabel}>Wave Height</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.wave}</Text>
                 <Text style={styles.conditionValue}>{spot.conditions.size}</Text>
               </View>
               <View style={styles.conditionItem}>
@@ -98,7 +146,7 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
                   size={20}
                   color={colors.primary}
                 />
-                <Text style={styles.conditionLabel}>Period</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.period}</Text>
                 <Text style={styles.conditionValue}>{spot.conditions.period}</Text>
               </View>
             </View>
@@ -109,7 +157,7 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
                   size={20}
                   color={colors.primary}
                 />
-                <Text style={styles.conditionLabel}>Wind</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.wind}</Text>
                 <Text style={styles.conditionValue}>{spot.conditions.wind}</Text>
               </View>
               <View style={styles.conditionItem}>
@@ -118,21 +166,21 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
                   size={20}
                   color={colors.primary}
                 />
-                <Text style={styles.conditionLabel}>Swell</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.swell}</Text>
                 <Text style={styles.conditionValue}>{spot.conditions.swell}</Text>
               </View>
             </View>
             <View style={styles.conditionRow}>
               <View style={styles.conditionItem}>
                 <Ionicons name="sunny-outline" size={20} color={colors.primary} />
-                <Text style={styles.conditionLabel}>Weather</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.weather}</Text>
                 <Text style={styles.conditionValue}>
                   {spot.conditions.temperature}°C
                 </Text>
               </View>
               <View style={styles.conditionItem}>
                 <Ionicons name="water-outline" size={20} color={colors.primary} />
-                <Text style={styles.conditionLabel}>Water</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.waterTemp}</Text>
                 <Text style={styles.conditionValue}>
                   {spot.conditions.waterTemp}°C
                 </Text>
@@ -143,7 +191,7 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
 
         {/* Forecast */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>TODAY'S FORECAST</Text>
+          <Text style={styles.sectionTitle}>{t.beachDetails.todayForecast}</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -172,6 +220,17 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
               </View>
             ))}
           </ScrollView>
+        </View>
+
+        {/* Check-in Button */}
+        <View style={styles.checkInContainer}>
+          <TouchableOpacity
+            style={styles.checkInButton}
+            onPress={() => navigation.navigate('CheckIn', { spotId })}
+          >
+            <Ionicons name="add-circle-outline" size={20} color={colors.textPrimary} />
+            <Text style={styles.checkInText}>{t.surfTracker.logSession}</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -204,6 +263,31 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  imageContainer: {
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.md,
+    position: 'relative',
+  },
+  beachImage: {
+    borderRadius: borderRadius.lg,
+  },
+  liveCamButton: {
+    position: 'absolute',
+    bottom: spacing.md,
+    right: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.round,
+    gap: spacing.xs,
+  },
+  liveCamText: {
+    ...typography.small,
+    color: colors.textPrimary,
+    fontWeight: '600',
   },
   locationContainer: {
     flexDirection: 'row',
@@ -277,6 +361,23 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   forecastSize: {
+    ...typography.bodyBold,
+    color: colors.textPrimary,
+  },
+  checkInContainer: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+  },
+  checkInButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    gap: spacing.sm,
+  },
+  checkInText: {
     ...typography.bodyBold,
     color: colors.textPrimary,
   },

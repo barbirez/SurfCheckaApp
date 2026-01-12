@@ -10,20 +10,21 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, borderRadius, typography } from '../../theme';
-import { Button, SurfSpotCard } from '../../components';
+import { SurfSpotCard } from '../../components';
 import { useUser } from '../../context/UserContext';
-import { RootStackParamList, SurfSpot, SurfConditions } from '../../types';
+import { RootStackParamList, SurfSpot } from '../../types';
+import { t } from '../../i18n';
 
 type RecommendationsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Recommendations'>;
 };
 
-// Mock recommended spots based on user preferences
+// Mock recommended spots in Portuguese
 const mockRecommendedSpots: SurfSpot[] = [
   {
     id: '1',
-    name: 'Kirra Beach',
-    location: 'Gold Coast, Australia',
+    name: 'Campeche',
+    location: 'Florianópolis, SC',
     conditions: {
       size: '1.3m',
       sizeValue: 1.3,
@@ -34,7 +35,7 @@ const mockRecommendedSpots: SurfSpot[] = [
       windDirection: 'S',
       swell: '1.5m',
       swellHeight: 1.5,
-      weather: 'Sunny',
+      weather: 'Ensolarado',
       temperature: 24,
     },
     rating: 4.8,
@@ -42,8 +43,8 @@ const mockRecommendedSpots: SurfSpot[] = [
   },
   {
     id: '2',
-    name: 'Rainbow Bay',
-    location: 'Gold Coast, Australia',
+    name: 'Joaquina',
+    location: 'Florianópolis, SC',
     conditions: {
       size: '1.2m',
       sizeValue: 1.2,
@@ -54,15 +55,15 @@ const mockRecommendedSpots: SurfSpot[] = [
       windDirection: 'SE',
       swell: '1.3m',
       swellHeight: 1.3,
-      weather: 'Partly Cloudy',
+      weather: 'Parcialmente nublado',
       temperature: 23,
     },
     rating: 4.5,
   },
   {
     id: '3',
-    name: 'Snapper Rocks',
-    location: 'Gold Coast, Australia',
+    name: 'Praia Mole',
+    location: 'Florianópolis, SC',
     conditions: {
       size: '1.4m',
       sizeValue: 1.4,
@@ -73,7 +74,7 @@ const mockRecommendedSpots: SurfSpot[] = [
       windDirection: 'S',
       swell: '1.6m',
       swellHeight: 1.6,
-      weather: 'Sunny',
+      weather: 'Ensolarado',
       temperature: 25,
     },
     rating: 4.6,
@@ -83,18 +84,18 @@ const mockRecommendedSpots: SurfSpot[] = [
 export function RecommendationsScreen({ navigation }: RecommendationsScreenProps) {
   const { user } = useUser();
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
-  };
-
-  // Get first spot's conditions for the summary
-  const topSpotConditions = mockRecommendedSpots[0].conditions;
-
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header with back button */}
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -102,11 +103,9 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.greeting}>
-            {getGreeting()}, {user.name}
+            {t.greeting.hey}, {user.name}
           </Text>
-          <Text style={styles.subtitle}>
-            We recommend these surfspots for you...
-          </Text>
+          <Text style={styles.subtitle}>{t.recommendations.subtitle}</Text>
         </View>
 
         {/* Recommended Spots */}
@@ -124,7 +123,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
 
         {/* Conditions Summary */}
         <View style={styles.conditionsSection}>
-          <Text style={styles.sectionTitle}>CONDITIONS TODAY</Text>
+          <Text style={styles.sectionTitle}>{t.home.conditionsToday}</Text>
 
           <View style={styles.conditionsGrid}>
             {/* Wave */}
@@ -135,7 +134,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
                   size={16}
                   color={colors.textMuted}
                 />
-                <Text style={styles.conditionLabel}>WAVE</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.wave}</Text>
               </View>
               <Text style={styles.conditionValue}>
                 1.1 - 1.5m{' '}
@@ -153,7 +152,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
                   size={16}
                   color={colors.textMuted}
                 />
-                <Text style={styles.conditionLabel}>WIND</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.wind}</Text>
               </View>
               <Text style={styles.conditionValue}>
                 12k/h{' '}
@@ -171,7 +170,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
                   size={16}
                   color={colors.textMuted}
                 />
-                <Text style={styles.conditionLabel}>PERIOD</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.period}</Text>
               </View>
               <Text style={styles.conditionValue}>10s</Text>
             </View>
@@ -184,7 +183,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
                   size={16}
                   color={colors.textMuted}
                 />
-                <Text style={styles.conditionLabel}>WEATHER</Text>
+                <Text style={styles.conditionLabel}>{t.conditions.weather}</Text>
               </View>
               <Text style={styles.conditionValue}>
                 24°C{' '}
@@ -198,7 +197,7 @@ export function RecommendationsScreen({ navigation }: RecommendationsScreenProps
         <View style={styles.mapButtonContainer}>
           <TouchableOpacity style={styles.mapButton}>
             <Ionicons name="map-outline" size={18} color={colors.textPrimary} />
-            <Text style={styles.mapButtonText}>View Map</Text>
+            <Text style={styles.mapButtonText}>{t.recommendations.viewMap}</Text>
           </TouchableOpacity>
         </View>
 
@@ -213,12 +212,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundDark,
   },
+  headerBar: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+  },
+  backButton: {
+    padding: spacing.sm,
+    alignSelf: 'flex-start',
+  },
   scrollView: {
     flex: 1,
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
     paddingBottom: spacing.md,
   },
   greeting: {
