@@ -1,111 +1,57 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { HomeScreen, SurfcheckScreen, TrackerScreen, ProfileScreen } from '../screens/main';
-import { colors } from '../theme';
-import { MainTabParamList } from '../types';
-import { View, Text, StyleSheet } from 'react-native';
-import { t } from '../i18n';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SearchScreen, ConditionsScreen, TrackScreen, ProfileScreen } from '../screens/main';
+import { CustomTabBar } from '../components/layout';
+import { MainTabParamList, RootStackParamList } from '../types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-// Placeholder for Favorites
-function FavoritesScreen() {
-  return (
-    <View style={styles.placeholder}>
-      <Ionicons name="heart-outline" size={48} color={colors.textMuted} />
-      <Text style={styles.placeholderText}>{t.favorites.emptyState}</Text>
-    </View>
-  );
-}
-
 export function MainNavigator() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleMagicFinderPress = () => {
+    navigation.navigate('MagicFinder');
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.backgroundDark,
-          borderTopColor: 'rgba(255, 255, 255, 0.1)',
-          borderTopWidth: 1,
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 65,
-        },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '500',
-        },
       }}
+      tabBar={(props) => (
+        <CustomTabBar {...props} onMagicFinderPress={handleMagicFinderPress} />
+      )}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Search"
+        component={SearchScreen}
         options={{
-          tabBarLabel: t.nav.home,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
-          ),
+          tabBarLabel: 'Buscar',
         }}
       />
       <Tab.Screen
-        name="Surfcheck"
-        component={SurfcheckScreen}
+        name="Conditions"
+        component={ConditionsScreen}
         options={{
-          tabBarLabel: t.nav.surfcheck,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flash-outline" size={size} color={color} />
-          ),
+          tabBarLabel: 'Condições',
         }}
       />
       <Tab.Screen
-        name="Tracker"
-        component={TrackerScreen}
+        name="Track"
+        component={TrackScreen}
         options={{
-          tabBarLabel: t.nav.tracker,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="surfing" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Favorites"
-        component={FavoritesScreen}
-        options={{
-          tabBarLabel: t.nav.favorites,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart-outline" size={size} color={color} />
-          ),
+          tabBarLabel: 'Tracker',
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: t.nav.profile,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
+          tabBarLabel: 'Perfil',
         }}
       />
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  placeholder: {
-    flex: 1,
-    backgroundColor: colors.backgroundDark,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 16,
-  },
-  placeholderText: {
-    color: colors.textMuted,
-    fontSize: 16,
-    textAlign: 'center',
-    paddingHorizontal: 32,
-  },
-});

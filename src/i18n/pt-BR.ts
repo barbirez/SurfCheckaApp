@@ -71,12 +71,37 @@ export const ptBR = {
     now: 'AGORA',
   },
 
-  // Surfcheck
+  // Surfcheck / Magic Finder
   surfcheck: {
-    title: 'Surfcheck',
+    title: 'Magic Finder',
     subtitle: 'Toque para encontrar o pico ideal pra você',
-    searching: 'Buscando os melhores picos...',
+    searching: 'Analisando condições...',
     poweredBy: 'Powered by FinFun',
+  },
+
+  // Magic Finder Results
+  magicFinder: {
+    title: 'Magic Finder',
+    greeting: 'E aí, surfista!',
+    subtitle: 'Recomendamos esses picos pra você...',
+    bestPick: 'Best pick',
+    alternatives: 'Outras Opções',
+    conditionsSummary: 'Condições Atuais',
+    tryAgain: 'Buscar Novamente',
+    rating: 'RATING',
+    wave: 'ONDA',
+    wind: 'VENTO',
+    period: 'PERÍODO',
+    weather: 'CLIMA',
+  },
+
+  // Ratings
+  ratings: {
+    poor: 'Ruim',
+    fair: 'Razoável',
+    good: 'Bom',
+    great: 'Ótimo',
+    epic: 'Épico',
   },
 
   // Recommendations

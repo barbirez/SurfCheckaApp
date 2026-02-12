@@ -1,4 +1,7 @@
 export { HomeScreen } from './HomeScreen';
+export { SearchScreen } from './SearchScreen';
+export { ConditionsScreen } from './ConditionsScreen';
+export { TrackScreen } from './TrackScreen';
 export { SurfcheckScreen } from './SurfcheckScreen';
 export { RecommendationsScreen } from './RecommendationsScreen';
 export { SpotDetailsScreen } from './SpotDetailsScreen';
@@ -7,3 +10,4 @@ export { TrackerScreen } from './TrackerScreen';
 export { CheckInScreen } from './CheckInScreen';
 export { ProfileScreen } from './ProfileScreen';
 export { EditProfileScreen } from './EditProfileScreen';
+export { MagicFinderResultsScreen } from './MagicFinderResultsScreen';

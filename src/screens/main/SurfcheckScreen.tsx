@@ -14,7 +14,8 @@ import Svg, { Circle, Path, Defs, LinearGradient, Stop, G } from 'react-native-s
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { colors, spacing, typography } from '../../theme';
-import { RootStackParamList } from '../../types';
+import { RootStackParamList, MagicFinderResult } from '../../types';
+import { mockSpots, getTopRatedSpots } from '../../data/mockData';
 import { t } from '../../i18n';
 
 type SurfcheckScreenProps = {
@@ -113,11 +114,26 @@ export function SurfcheckScreen({ navigation }: SurfcheckScreenProps) {
       ringAnimation(ring2Anim, 500).start();
       ringAnimation(ring3Anim, 1000).start();
 
-      // Navigate to recommendations after search
+      // Navigate to results after search
       const timer = setTimeout(() => {
         setIsSearching(false);
         rotateAnim.setValue(0);
-        navigation.navigate('Recommendations');
+
+        // Create Magic Finder results from top spots
+        const topSpots = getTopRatedSpots(3);
+        const results: MagicFinderResult = {
+          bestPick: topSpots[0],
+          alternatives: topSpots.slice(1),
+          conditionsSummary: {
+            waveRange: topSpots[0].conditions.size,
+            windCondition: `${topSpots[0].conditions.windSpeed}km/h ${topSpots[0].conditions.windDirection}`,
+            period: topSpots[0].conditions.period,
+            weather: topSpots[0].conditions.weather,
+            temperature: topSpots[0].conditions.temperature,
+          },
+        };
+
+        navigation.navigate('MagicFinderResults', { results });
       }, 3500);
 
       return () => {

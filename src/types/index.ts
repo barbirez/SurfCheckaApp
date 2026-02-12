@@ -1,5 +1,5 @@
+// User types
 export type SurfExperience = 'less_than_year' | '1_2_years' | '3_5_years' | '5_plus_years';
-
 export type SurfLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export interface UserProfile {
@@ -10,6 +10,34 @@ export interface UserProfile {
   favoriteSpots: string[];
 }
 
+// Rating system (Poor to Epic)
+export type SpotRating = 'poor' | 'fair' | 'good' | 'great' | 'epic';
+
+export const RATING_VALUES: Record<SpotRating, number> = {
+  poor: 1,
+  fair: 2,
+  good: 3,
+  great: 4,
+  epic: 5,
+};
+
+export const RATING_LABELS: Record<SpotRating, string> = {
+  poor: 'Ruim',
+  fair: 'Razoável',
+  good: 'Bom',
+  great: 'Ótimo',
+  epic: 'Épico',
+};
+
+export const RATING_COLORS: Record<SpotRating, string> = {
+  poor: '#FF453A',
+  fair: '#FF9F0A',
+  good: '#FFD60A',
+  great: '#30D158',
+  epic: '#5E5CE6',
+};
+
+// Surf conditions
 export interface SurfConditions {
   size: string;
   sizeValue: number;
@@ -24,21 +52,26 @@ export interface SurfConditions {
   temperature: number;
   tide?: string;
   waterTemp?: number;
+  rating?: SpotRating;
+  ratingValue?: number;
 }
 
+// Surf spot
 export interface SurfSpot {
   id: string;
   name: string;
   location: string;
   conditions: SurfConditions;
-  rating: number;
+  rating: SpotRating;
+  ratingValue: number;
   isTopPick?: boolean;
   distance?: string;
-  imageUrl?: string;
+  imageUrl: string;
   latitude?: number;
   longitude?: number;
   liveCamUrl?: string;
   description?: string;
+  difficultyLevel?: 'beginner' | 'intermediate' | 'advanced' | 'all';
 }
 
 export interface TimeSlot {
@@ -47,24 +80,69 @@ export interface TimeSlot {
   conditions: SurfConditions;
 }
 
-// Surf Tracker types
+// Forecast data for charts
+export interface ForecastData {
+  time: string;
+  date: string;
+  waveHeight: number;
+  wavePeriod: number;
+  windSpeed: number;
+  windDirection: string;
+  swellHeight: number;
+  swellDirection: string;
+  tideHeight: number;
+  tideState: 'rising' | 'falling' | 'high' | 'low';
+}
+
+// Surf session (for tracking)
 export interface SurfSession {
   id: string;
   date: string;
-  duration: number; // in minutes
+  duration: number;
   spotId: string;
   spotName: string;
-  conditionRating: number; // 1-5 stars
-  surfRating: number; // 1-5 stars
+  spotImageUrl?: string;
+  conditionRating: number;
+  surfRating: number;
   notes?: string;
+  createdAt?: string;
 }
 
-export interface SurfStreak {
-  currentStreak: number;
-  longestStreak: number;
+// Consistency stats (replacing streak focus)
+export interface ConsistencyStats {
   totalSessions: number;
   totalHours: number;
-  thisMonthSessions: number;
+  sessionsThisMonth: number;
+  sessionsThisWeek: number;
+  averageSessionLength: number;
+  favoriteSpot?: string;
+  lastSessionDate?: string;
+  weeklyGoal?: number;
+  weeklyProgress?: number;
+}
+
+// Weekly activity for Track screen
+export interface WeeklyActivity {
+  date: string;
+  hasSurfed: boolean;
+  sessions: SurfSession[];
+}
+
+// Magic Finder types
+export interface MagicFinderResult {
+  bestPick: SurfSpot;
+  alternatives: SurfSpot[];
+  conditionsSummary: ConditionsSummary;
+  reasoning?: string;
+}
+
+export interface ConditionsSummary {
+  waveRange: string;
+  windCondition: string;
+  period: string;
+  weather: string;
+  temperature: number;
+  bestTimeOfDay?: string;
 }
 
 // Article type for Learn & Follow
@@ -92,13 +170,14 @@ export type RootStackParamList = {
   OnboardingExperience: undefined;
   OnboardingLevel: undefined;
   Main: undefined;
-  Home: undefined;
-  Surfcheck: undefined;
-  Recommendations: undefined;
+  MagicFinder: undefined;
+  MagicFinderResults: { results: MagicFinderResult };
   SpotDetails: { spotId: string };
-  BeachList: undefined;
   CheckIn: { spotId?: string };
   EditProfile: undefined;
+  Settings: undefined;
+  SessionHistory: undefined;
+  CalendarView: undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -108,9 +187,8 @@ export type OnboardingStackParamList = {
 };
 
 export type MainTabParamList = {
-  Home: undefined;
-  Surfcheck: undefined;
-  Tracker: undefined;
-  Favorites: undefined;
+  Search: undefined;
+  Conditions: undefined;
+  Track: undefined;
   Profile: undefined;
 };

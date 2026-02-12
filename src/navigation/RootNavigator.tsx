@@ -3,7 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import { MainNavigator } from './MainNavigator';
 import {
-  RecommendationsScreen,
+  SurfcheckScreen,
+  MagicFinderResultsScreen,
   SpotDetailsScreen,
   BeachListScreen,
   CheckInScreen,
@@ -40,8 +41,16 @@ export function RootNavigator() {
         <>
           <Stack.Screen name="Main" component={MainNavigator} />
           <Stack.Screen
-            name="Recommendations"
-            component={RecommendationsScreen}
+            name="MagicFinder"
+            component={SurfcheckScreen}
+            options={{
+              animation: 'slide_from_bottom',
+              presentation: 'modal',
+            }}
+          />
+          <Stack.Screen
+            name="MagicFinderResults"
+            component={MagicFinderResultsScreen}
             options={{
               animation: 'slide_from_right',
             }}
@@ -51,13 +60,6 @@ export function RootNavigator() {
             component={SpotDetailsScreen}
             options={{
               animation: 'slide_from_right',
-            }}
-          />
-          <Stack.Screen
-            name="BeachList"
-            component={BeachListScreen}
-            options={{
-              animation: 'slide_from_bottom',
             }}
           />
           <Stack.Screen
