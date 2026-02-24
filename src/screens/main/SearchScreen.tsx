@@ -123,11 +123,11 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
     paddingBottom: spacing.md,
   },
   title: {
-    ...typography.h2,
+    ...typography.pageTitle,
     color: colors.textPrimary,
   },
   searchContainer: {
@@ -152,10 +152,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
     paddingHorizontal: spacing.lg,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   horizontalScroll: {
     paddingHorizontal: spacing.lg,

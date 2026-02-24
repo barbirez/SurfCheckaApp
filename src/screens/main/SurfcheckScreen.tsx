@@ -198,34 +198,34 @@ export function SurfcheckScreen({ navigation }: SurfcheckScreenProps) {
             >
               <Defs>
                 <LinearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
-                  <Stop offset="0" stopColor={colors.primary} stopOpacity="0.5" />
-                  <Stop offset="1" stopColor={colors.primaryLight} stopOpacity="0.1" />
+                  <Stop offset="0" stopColor={colors.primary} stopOpacity={0.5} />
+                  <Stop offset="1" stopColor={colors.primaryLight} stopOpacity={0.1} />
                 </LinearGradient>
                 <LinearGradient id="sweepGradient" x1="0" y1="0" x2="1" y2="0">
-                  <Stop offset="0" stopColor={colors.primary} stopOpacity="0" />
-                  <Stop offset="1" stopColor={colors.primary} stopOpacity="1" />
+                  <Stop offset="0" stopColor={colors.primary} stopOpacity={0} />
+                  <Stop offset="1" stopColor={colors.primary} stopOpacity={1} />
                 </LinearGradient>
               </Defs>
 
               {/* Background circles */}
-              <Circle cx="150" cy="150" r="140" fill="none" stroke="url(#ringGradient)" strokeWidth="1" />
-              <Circle cx="150" cy="150" r="105" fill="none" stroke="url(#ringGradient)" strokeWidth="1" />
-              <Circle cx="150" cy="150" r="70" fill="none" stroke="url(#ringGradient)" strokeWidth="1" />
-              <Circle cx="150" cy="150" r="35" fill="none" stroke="url(#ringGradient)" strokeWidth="1" />
+              <Circle cx={150} cy={150} r={140} fill="none" stroke="url(#ringGradient)" strokeWidth={1} />
+              <Circle cx={150} cy={150} r={105} fill="none" stroke="url(#ringGradient)" strokeWidth={1} />
+              <Circle cx={150} cy={150} r={70} fill="none" stroke="url(#ringGradient)" strokeWidth={1} />
+              <Circle cx={150} cy={150} r={35} fill="none" stroke="url(#ringGradient)" strokeWidth={1} />
 
               {/* Cross lines */}
-              <Path d="M150,10 L150,290" stroke={colors.primary} strokeWidth="0.5" opacity="0.3" />
-              <Path d="M10,150 L290,150" stroke={colors.primary} strokeWidth="0.5" opacity="0.3" />
-              <Path d="M50,50 L250,250" stroke={colors.primary} strokeWidth="0.5" opacity="0.2" />
-              <Path d="M250,50 L50,250" stroke={colors.primary} strokeWidth="0.5" opacity="0.2" />
+              <Path d="M150,10 L150,290" stroke={colors.primary} strokeWidth={0.5} opacity={0.3} />
+              <Path d="M10,150 L290,150" stroke={colors.primary} strokeWidth={0.5} opacity={0.3} />
+              <Path d="M50,50 L250,250" stroke={colors.primary} strokeWidth={0.5} opacity={0.2} />
+              <Path d="M250,50 L50,250" stroke={colors.primary} strokeWidth={0.5} opacity={0.2} />
 
               {/* Data points when searching */}
               {isSearching && (
                 <G>
-                  <Circle cx="180" cy="100" r="4" fill={colors.accent} opacity="0.8" />
-                  <Circle cx="120" cy="180" r="3" fill={colors.primary} opacity="0.6" />
-                  <Circle cx="200" cy="170" r="5" fill={colors.accent} opacity="0.9" />
-                  <Circle cx="90" cy="120" r="3" fill={colors.primary} opacity="0.5" />
+                  <Circle cx={180} cy={100} r={4} fill={colors.accent} opacity={0.8} />
+                  <Circle cx={120} cy={180} r={3} fill={colors.primary} opacity={0.6} />
+                  <Circle cx={200} cy={170} r={5} fill={colors.accent} opacity={0.9} />
+                  <Circle cx={90} cy={120} r={3} fill={colors.primary} opacity={0.5} />
                 </G>
               )}
             </Svg>
@@ -306,20 +306,21 @@ export function SurfcheckScreen({ navigation }: SurfcheckScreenProps) {
             )}
 
             {/* Center button */}
-            <Animated.View
-              style={[
-                styles.centerButton,
-                isSearching && {
-                  shadowOpacity: glowOpacity,
-                },
-              ]}
-            >
+            <View style={styles.centerButton}>
+              {isSearching && (
+                <Animated.View
+                  style={[
+                    styles.glowRing,
+                    { opacity: glowOpacity },
+                  ]}
+                />
+              )}
               <Ionicons
                 name="flash"
                 size={36}
                 color={colors.textPrimary}
               />
-            </Animated.View>
+            </View>
           </Animated.View>
         </TouchableOpacity>
       </View>
@@ -425,6 +426,16 @@ const styles = StyleSheet.create({
     elevation: 10,
     borderWidth: 2,
     borderColor: 'rgba(74, 124, 255, 0.3)',
+  },
+  glowRing: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 45,
+    borderWidth: 3,
+    borderColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 25,
   },
   footer: {
     paddingBottom: spacing.xxl,

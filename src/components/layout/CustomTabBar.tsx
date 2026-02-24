@@ -31,7 +31,6 @@ export function CustomTabBar({
 }: CustomTabBarProps) {
   const insets = useSafeAreaInsets();
 
-  // Split tabs into left and right groups (2 on each side of FAB)
   const leftTabs = state.routes.slice(0, 2);
   const rightTabs = state.routes.slice(2);
 
@@ -57,24 +56,33 @@ export function CustomTabBar({
       ? TAB_ICONS_FOCUSED[route.name]
       : TAB_ICONS[route.name];
 
+    const iconColor = isFocused ? colors.primary : colors.textMuted;
+
     return (
       <TouchableOpacity
         key={route.key}
         style={styles.tab}
         onPress={onPress}
+        activeOpacity={1}
         accessibilityRole="button"
         accessibilityState={isFocused ? { selected: true } : {}}
         accessibilityLabel={options.tabBarAccessibilityLabel}
       >
-        <Ionicons
-          name={iconName || 'ellipse'}
-          size={24}
-          color={isFocused ? colors.primary : colors.textMuted}
-        />
+        <View style={styles.iconWrapper}>
+          {isFocused && <View style={styles.activePill} />}
+          <Ionicons
+            name={iconName || 'ellipse'}
+            size={24}
+            color={iconColor}
+          />
+        </View>
         <Text
           style={[
             styles.tabLabel,
-            { color: isFocused ? colors.primary : colors.textMuted },
+            {
+              color: iconColor,
+              fontWeight: isFocused ? '600' : '500',
+            },
           ]}
         >
           {label as string}
@@ -86,12 +94,10 @@ export function CustomTabBar({
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={styles.tabBar}>
-        {/* Left tabs */}
         <View style={styles.tabGroup}>
           {leftTabs.map((route, index) => renderTab(route, index, false))}
         </View>
 
-        {/* Center FAB */}
         <View style={styles.fabContainer}>
           <TouchableOpacity
             style={[styles.fab, shadows.lg]}
@@ -102,7 +108,6 @@ export function CustomTabBar({
           </TouchableOpacity>
         </View>
 
-        {/* Right tabs */}
         <View style={styles.tabGroup}>
           {rightTabs.map((route, index) => renderTab(route, index, true))}
         </View>
@@ -113,14 +118,14 @@ export function CustomTabBar({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.backgroundDark,
+    backgroundColor: colors.tabBarBg,
     borderTopWidth: 1,
-    borderTopColor: colors.backgroundCard,
+    borderTopColor: colors.divider,
   },
   tabBar: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    height: 65,
+    height: 49,
     paddingHorizontal: spacing.sm,
   },
   tabGroup: {
@@ -131,13 +136,26 @@ const styles = StyleSheet.create({
   tab: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     minWidth: 60,
+  },
+  iconWrapper: {
+    width: 36,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activePill: {
+    position: 'absolute',
+    width: 36,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.tabActiveIndicator,
   },
   tabLabel: {
     ...typography.small,
-    marginTop: spacing.xs,
-    fontWeight: '500',
+    fontSize: 11,
+    marginTop: 2,
   },
   fabContainer: {
     width: 70,

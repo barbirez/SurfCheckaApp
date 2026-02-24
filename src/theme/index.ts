@@ -24,24 +24,31 @@ export const borderRadius = {
 
 // iOS 26 compliant shadows
 export const shadows = {
+  none: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
+  },
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
     elevation: 1,
   },
   md: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.10,
     shadowRadius: 8,
     elevation: 3,
   },
   lg: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.14,
     shadowRadius: 16,
     elevation: 5,
   },
@@ -52,9 +59,26 @@ export const shadows = {
     shadowRadius: 24,
     elevation: 8,
   },
+  sheet: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 10,
+  },
 };
 
 export const typography = {
+  pageTitle: {
+    fontSize: 28,
+    fontWeight: '800' as const,
+    lineHeight: 34,
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: '700' as const,
+    lineHeight: 24,
+  },
   h1: {
     fontSize: 32,
     fontWeight: '700' as const,

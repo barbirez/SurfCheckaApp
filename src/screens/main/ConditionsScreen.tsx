@@ -11,7 +11,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, borderRadius, typography, shadows } from '../../theme';
 import { RootStackParamList, SpotRating } from '../../types';
-import { RatingBadge, RatingDots } from '../../components/ui';
+import { RatingBadge, RatingDots, FilterPill } from '../../components/ui';
 import { mockSpots, getTopRatedSpots } from '../../data/mockData';
 import { t } from '../../i18n';
 
@@ -55,28 +55,12 @@ export function ConditionsScreen({ navigation }: ConditionsScreenProps) {
         {/* Time Slot Selector */}
         <View style={styles.timeSlotContainer}>
           {timeSlots.map((slot) => (
-            <TouchableOpacity
+            <FilterPill
               key={slot.id}
-              style={[
-                styles.timeSlotButton,
-                selectedTimeSlot === slot.id && styles.timeSlotButtonActive,
-              ]}
+              label={slot.label}
+              active={selectedTimeSlot === slot.id}
               onPress={() => setSelectedTimeSlot(slot.id)}
-            >
-              <Ionicons
-                name={slot.icon as keyof typeof Ionicons.glyphMap}
-                size={20}
-                color={selectedTimeSlot === slot.id ? colors.primary : colors.textMuted}
-              />
-              <Text
-                style={[
-                  styles.timeSlotText,
-                  selectedTimeSlot === slot.id && styles.timeSlotTextActive,
-                ]}
-              >
-                {slot.label}
-              </Text>
-            </TouchableOpacity>
+            />
           ))}
         </View>
 
@@ -164,7 +148,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
     paddingBottom: spacing.md,
   },
   greeting: {
@@ -173,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   title: {
-    ...typography.h2,
+    ...typography.pageTitle,
     color: colors.textPrimary,
   },
   timeSlotContainer: {
@@ -181,29 +165,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.lg,
     gap: spacing.sm,
-  },
-  timeSlotButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.backgroundCard,
-    paddingVertical: spacing.sm + 2,
-    borderRadius: borderRadius.md,
-    gap: spacing.xs,
-  },
-  timeSlotButtonActive: {
-    backgroundColor: colors.primary + '20',
-    borderWidth: 1,
-    borderColor: colors.primary,
-  },
-  timeSlotText: {
-    ...typography.caption,
-    color: colors.textMuted,
-    fontWeight: '500',
-  },
-  timeSlotTextActive: {
-    color: colors.primary,
   },
   overviewCard: {
     backgroundColor: colors.backgroundCard,
@@ -253,9 +214,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   spotConditionCard: {
     backgroundColor: colors.backgroundCard,

@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, borderRadius, typography } from '../../theme';
 import { ImagePlaceholder } from '../../components';
+import { ListRow } from '../../components/ui';
 import { useUser } from '../../context/UserContext';
 import { RootStackParamList, SurfExperience, SurfLevel } from '../../types';
 import { t } from '../../i18n';
@@ -31,30 +32,6 @@ const levelLabels: Record<SurfLevel, string> = {
   'intermediate': t.onboarding.level.options.intermediate,
   'advanced': t.onboarding.level.options.advanced,
 };
-
-function MenuItem({
-  icon,
-  label,
-  onPress,
-  showArrow = true,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  label: string;
-  onPress: () => void;
-  showArrow?: boolean;
-}) {
-  return (
-    <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-      <View style={styles.menuIcon}>
-        <Ionicons name={icon} size={22} color={colors.primary} />
-      </View>
-      <Text style={styles.menuLabel}>{label}</Text>
-      {showArrow && (
-        <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
-      )}
-    </TouchableOpacity>
-  );
-}
 
 export function ProfileScreen({ navigation }: ProfileScreenProps) {
   const { user, resetUser } = useUser();
@@ -116,20 +93,19 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
 
         {/* Menu */}
         <View style={styles.section}>
-          <View style={styles.menuCard}>
-            <MenuItem
-              icon="settings-outline"
-              label={t.profile.settings}
-              onPress={() => {}}
-            />
-            <View style={styles.menuDivider} />
-            <MenuItem
-              icon="log-out-outline"
-              label={t.profile.logout}
-              onPress={handleLogout}
-              showArrow={false}
-            />
-          </View>
+          <ListRow
+            icon="settings-outline"
+            title={t.profile.settings}
+            onPress={() => {}}
+            variant="card"
+          />
+          <ListRow
+            icon="log-out-outline"
+            title={t.profile.logout}
+            onPress={handleLogout}
+            variant="card"
+            showChevron={false}
+          />
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -148,11 +124,11 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
     paddingBottom: spacing.md,
   },
   title: {
-    ...typography.h2,
+    ...typography.pageTitle,
     color: colors.textPrimary,
   },
   profileCard: {
@@ -191,9 +167,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   infoCard: {
     backgroundColor: colors.backgroundCard,
@@ -217,35 +193,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.backgroundDark,
     marginVertical: spacing.sm,
-  },
-  menuCard: {
-    backgroundColor: colors.backgroundCard,
-    borderRadius: borderRadius.lg,
-    overflow: 'hidden',
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: spacing.md,
-  },
-  menuIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(74, 124, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: spacing.md,
-  },
-  menuLabel: {
-    flex: 1,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  menuDivider: {
-    height: 1,
-    backgroundColor: colors.backgroundDark,
-    marginLeft: 60,
   },
   bottomSpacer: {
     height: spacing.xxl,

@@ -28,7 +28,7 @@ export function Surfboard({ width = 200, height = 350 }: SurfboardProps) {
              C45 40, 70 10, 100 10Z"
           fill={colors.surfboardGreen}
           stroke={colors.surfboardGreenDark}
-          strokeWidth="2"
+          strokeWidth={2}
         />
         {/* Surfboard stripe */}
         <Path
@@ -38,7 +38,7 @@ export function Surfboard({ width = 200, height = 350 }: SurfboardProps) {
              C150 280, 130 300, 100 300"
           fill="none"
           stroke="rgba(255,255,255,0.2)"
-          strokeWidth="20"
+          strokeWidth={20}
         />
         {/* Star decoration */}
         <Polygon

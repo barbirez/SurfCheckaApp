@@ -18,7 +18,8 @@ import {
   YouTubeCard,
 } from '../../components';
 import { useUser } from '../../context/UserContext';
-import { RootStackParamList, SurfSpot, Article, YouTubeVideo, SurfConditions } from '../../types';
+import { RootStackParamList, SurfSpot, Article, YouTubeVideo, SurfConditions, SpotRating } from '../../types';
+import { BEACH_IMAGES } from '../../data/mockData';
 import { t } from '../../i18n';
 
 type HomeScreenProps = {
@@ -49,28 +50,36 @@ const mockSurfSpots: SurfSpot[] = [
     name: 'Campeche',
     location: 'Florianópolis, SC',
     conditions: mockConditions,
-    rating: 4.5,
+    rating: 'epic' as SpotRating,
+    ratingValue: 5,
+    imageUrl: BEACH_IMAGES.surf1,
   },
   {
     id: '2',
     name: 'Joaquina',
     location: 'Florianópolis, SC',
     conditions: mockConditions,
-    rating: 4.2,
+    rating: 'great' as SpotRating,
+    ratingValue: 4,
+    imageUrl: BEACH_IMAGES.surf2,
   },
   {
     id: '3',
     name: 'Praia Mole',
     location: 'Florianópolis, SC',
     conditions: mockConditions,
-    rating: 4.0,
+    rating: 'good' as SpotRating,
+    ratingValue: 3,
+    imageUrl: BEACH_IMAGES.surf3,
   },
   {
     id: '4',
     name: 'Barra da Lagoa',
     location: 'Florianópolis, SC',
     conditions: mockConditions,
-    rating: 3.8,
+    rating: 'fair' as SpotRating,
+    ratingValue: 2,
+    imageUrl: BEACH_IMAGES.wave1,
   },
 ];
 
@@ -207,20 +216,20 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
     paddingBottom: spacing.lg,
   },
   greeting: {
-    ...typography.h2,
+    ...typography.pageTitle,
     color: colors.textPrimary,
   },
   section: {
     marginBottom: spacing.lg,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
     paddingHorizontal: spacing.lg,
   },
   spotsScrollView: {

@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { colors, spacing, borderRadius, typography } from '../../theme';
 import { ImagePlaceholder } from '../../components';
+import { IconActionButton } from '../../components/ui';
 import { RootStackParamList } from '../../types';
 import { t } from '../../i18n';
 
@@ -222,15 +223,23 @@ export function SpotDetailsScreen({ navigation, route }: SpotDetailsScreenProps)
           </ScrollView>
         </View>
 
-        {/* Check-in Button */}
-        <View style={styles.checkInContainer}>
-          <TouchableOpacity
-            style={styles.checkInButton}
+        {/* Quick Actions */}
+        <View style={styles.actionsRow}>
+          <IconActionButton
+            icon="add-circle-outline"
+            label={t.surfTracker.logSession}
             onPress={() => navigation.navigate('CheckIn', { spotId })}
-          >
-            <Ionicons name="add-circle-outline" size={20} color={colors.textPrimary} />
-            <Text style={styles.checkInText}>{t.surfTracker.logSession}</Text>
-          </TouchableOpacity>
+          />
+          <IconActionButton
+            icon="videocam-outline"
+            label={t.beachDetails.liveCameras}
+            onPress={handleLiveCamera}
+          />
+          <IconActionButton
+            icon="share-outline"
+            label="Compartilhar"
+            onPress={() => {}}
+          />
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -305,9 +314,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   description: {
     ...typography.body,
@@ -364,22 +373,11 @@ const styles = StyleSheet.create({
     ...typography.bodyBold,
     color: colors.textPrimary,
   },
-  checkInContainer: {
-    paddingHorizontal: spacing.lg,
-    marginBottom: spacing.lg,
-  },
-  checkInButton: {
+  actionsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.md,
-    gap: spacing.sm,
-  },
-  checkInText: {
-    ...typography.bodyBold,
-    color: colors.textPrimary,
+    justifyContent: 'space-around',
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.xl,
   },
   bottomSpacer: {
     height: spacing.xxl,

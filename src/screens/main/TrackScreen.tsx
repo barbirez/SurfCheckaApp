@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, borderRadius, typography, shadows } from '../../theme';
 import { RootStackParamList, SurfSession } from '../../types';
 import { WeeklyActivityBar, CalendarView } from '../../components/track';
+import { FilterPill } from '../../components/ui';
 import { SessionLogCard } from '../../components/cards';
 import {
   mockSessions,
@@ -53,10 +54,11 @@ export function TrackScreen({ navigation }: TrackScreenProps) {
             <Text style={styles.title}>Seu Surf</Text>
             <Text style={styles.subtitle}>Acompanhe sua consistência</Text>
           </View>
-          <TouchableOpacity style={styles.logButton} onPress={handleLogSession}>
-            <Ionicons name="add" size={20} color={colors.textPrimary} />
-            <Text style={styles.logButtonText}>Registrar</Text>
-          </TouchableOpacity>
+          <FilterPill
+            label="Registrar"
+            active
+            onPress={handleLogSession}
+          />
         </View>
 
         {/* Weekly Activity Bar */}
@@ -149,31 +151,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
     paddingBottom: spacing.md,
   },
   title: {
-    ...typography.h2,
+    ...typography.pageTitle,
     color: colors.textPrimary,
   },
   subtitle: {
     ...typography.caption,
     color: colors.textMuted,
     marginTop: spacing.xs,
-  },
-  logButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.round,
-    gap: spacing.xs,
-  },
-  logButtonText: {
-    ...typography.caption,
-    color: colors.textPrimary,
-    fontWeight: '600',
   },
   weeklySection: {
     paddingHorizontal: spacing.lg,
@@ -231,7 +219,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   sectionTitle: {
-    ...typography.label,
+    ...typography.sectionHeader,
     color: colors.textMuted,
   },
   seeAllText: {

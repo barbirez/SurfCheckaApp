@@ -5,11 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Modal,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SurfSession } from '../../types';
-import { colors, spacing, borderRadius, typography, shadows } from '../../theme';
+import { colors, spacing, borderRadius, typography } from '../../theme';
+import { BottomSheet } from '../ui';
 
 interface CalendarViewProps {
   visible: boolean;
@@ -36,12 +36,10 @@ export function CalendarView({
 
     const days: (number | null)[] = [];
 
-    // Add empty slots for days before the first day of month
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
 
-    // Add days of month
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(i);
     }
@@ -76,124 +74,90 @@ export function CalendarView({
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   return (
-    <Modal
+    <BottomSheet
       visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
+      onClose={onClose}
+      title="Calendário de Sessões"
     >
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Calendário de Sessões</Text>
-          <View style={styles.closeButton} />
-        </View>
+      {/* Month Navigation */}
+      <View style={styles.monthNav}>
+        <TouchableOpacity onPress={() => navigateMonth('prev')}>
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={styles.monthText}>{formatMonth(currentMonth)}</Text>
+        <TouchableOpacity onPress={() => navigateMonth('next')}>
+          <Ionicons name="chevron-forward" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+      </View>
 
-        {/* Month Navigation */}
-        <View style={styles.monthNav}>
-          <TouchableOpacity onPress={() => navigateMonth('prev')}>
-            <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.monthText}>{formatMonth(currentMonth)}</Text>
-          <TouchableOpacity onPress={() => navigateMonth('next')}>
-            <Ionicons name="chevron-forward" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-        </View>
+      {/* Week Days Header */}
+      <View style={styles.weekDaysRow}>
+        {weekDays.map((day) => (
+          <Text key={day} style={styles.weekDayText}>
+            {day}
+          </Text>
+        ))}
+      </View>
 
-        {/* Week Days Header */}
-        <View style={styles.weekDaysRow}>
-          {weekDays.map((day) => (
-            <Text key={day} style={styles.weekDayText}>
-              {day}
-            </Text>
-          ))}
-        </View>
+      {/* Calendar Grid */}
+      <ScrollView style={styles.calendarScroll}>
+        <View style={styles.calendarGrid}>
+          {days.map((day, index) => {
+            if (day === null) {
+              return <View key={`empty-${index}`} style={styles.dayCell} />;
+            }
 
-        {/* Calendar Grid */}
-        <ScrollView style={styles.calendarScroll}>
-          <View style={styles.calendarGrid}>
-            {days.map((day, index) => {
-              if (day === null) {
-                return <View key={`empty-${index}`} style={styles.dayCell} />;
-              }
+            const daySessions = getSessionsForDay(day);
+            const hasSessions = daySessions.length > 0;
 
-              const daySessions = getSessionsForDay(day);
-              const hasSessions = daySessions.length > 0;
-
-              return (
-                <TouchableOpacity
-                  key={day}
+            return (
+              <TouchableOpacity
+                key={day}
+                style={[
+                  styles.dayCell,
+                  hasSessions && styles.dayCellActive,
+                ]}
+                onPress={() => {
+                  if (hasSessions) {
+                    onSelectSession(daySessions[0]);
+                  }
+                }}
+                disabled={!hasSessions}
+              >
+                <Text
                   style={[
-                    styles.dayCell,
-                    hasSessions && styles.dayCellActive,
+                    styles.dayText,
+                    hasSessions && styles.dayTextActive,
                   ]}
-                  onPress={() => {
-                    if (hasSessions) {
-                      onSelectSession(daySessions[0]);
-                    }
-                  }}
-                  disabled={!hasSessions}
                 >
-                  <Text
-                    style={[
-                      styles.dayText,
-                      hasSessions && styles.dayTextActive,
-                    ]}
-                  >
-                    {day}
-                  </Text>
-                  {hasSessions && (
-                    <View style={styles.sessionDot} />
-                  )}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
+                  {day}
+                </Text>
+                {hasSessions && (
+                  <View style={styles.sessionDot} />
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
 
-        {/* Legend */}
-        <View style={styles.legend}>
-          <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
-            <Text style={styles.legendText}>Dia com sessão</Text>
-          </View>
+      {/* Legend */}
+      <View style={styles.legend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
+          <Text style={styles.legendText}>Dia com sessão</Text>
         </View>
       </View>
-    </Modal>
+    </BottomSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backgroundDark,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.backgroundCard,
-  },
-  closeButton: {
-    width: 40,
-    alignItems: 'center',
-  },
-  title: {
-    ...typography.h3,
-    color: colors.textPrimary,
-  },
   monthNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    marginBottom: spacing.lg,
   },
   monthText: {
     ...typography.bodyBold,
@@ -202,7 +166,6 @@ const styles = StyleSheet.create({
   },
   weekDaysRow: {
     flexDirection: 'row',
-    paddingHorizontal: spacing.md,
     marginBottom: spacing.sm,
   },
   weekDayText: {
@@ -213,12 +176,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   calendarScroll: {
-    flex: 1,
+    maxHeight: 320,
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: spacing.md,
   },
   dayCell: {
     width: `${100 / 7}%`,
@@ -228,7 +190,7 @@ const styles = StyleSheet.create({
     padding: spacing.xs,
   },
   dayCellActive: {
-    backgroundColor: colors.primary + '20',
+    backgroundColor: colors.primaryFaint,
     borderRadius: borderRadius.md,
   },
   dayText: {
@@ -251,7 +213,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: colors.backgroundCard,
+    borderTopColor: colors.divider,
+    marginTop: spacing.sm,
   },
   legendItem: {
     flexDirection: 'row',

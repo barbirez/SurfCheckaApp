@@ -37,6 +37,13 @@ export const colors = {
   surfboardGreenDark: '#2EAD9E',
   surfboardStar: '#F5C542',
 
+  // Sheet & tab bar
+  backgroundSheet: '#1E2235',
+  primaryFaint: 'rgba(51, 102, 255, 0.12)',
+  tabBarBg: '#1A1D29',
+  tabActiveIndicator: 'rgba(51, 102, 255, 0.15)',
+  divider: 'rgba(255, 255, 255, 0.08)',
+
   // Transparent overlays
   overlay: 'rgba(0, 0, 0, 0.5)',
   cardOverlay: 'rgba(74, 124, 255, 0.3)',
